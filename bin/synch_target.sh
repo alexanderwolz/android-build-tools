@@ -46,15 +46,15 @@ SYSIMG_DIR="$ANDROID_HOME/system-images/android-31/$DEVICE"
 mkdir -p $SYSIMG_DIR
 
 #source props missing
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/kernel-ranchu" $SYSIMG_DIR"/kernel-ranchu-64" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/ramdisk-qemu.img" $SYSIMG_DIR"/ramdisk.img" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/system-qemu.img" $SYSIMG_DIR"/system.img" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/VerifiedBootParams.textproto" $SYSIMG_DIR"/VerifiedBootParams.textproto" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/advancedFeatures.ini" $SYSIMG_DIR"/advancedFeatures.ini" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/system/build.prop" $SYSIMG_DIR"/build.prop" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/encryptionkey.img" $SYSIMG_DIR"/encryptionkey.img" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/userdata.img" $SYSIMG_DIR"/userdata.img" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/vendor-qemu.img" $SYSIMG_DIR"/vendor.img" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/data" $SYSIMG_DIR || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/product-qemu.img" $SYSIMG_DIR"/product.img" || exit 1
-rsync -av -e "$SSH_OPTS" $REMOTE:$TARGET"/system_ext-qemu.img" $SYSIMG_DIR"/system_ext.img" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/kernel-ranchu" $SYSIMG_DIR"/kernel-ranchu-64" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/ramdisk-qemu.img" $SYSIMG_DIR"/ramdisk.img" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/system-qemu.img" $SYSIMG_DIR"/system.img" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/VerifiedBootParams.textproto" $SYSIMG_DIR"/VerifiedBootParams.textproto" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/advancedFeatures.ini" $SYSIMG_DIR"/advancedFeatures.ini" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/system/build.prop" $SYSIMG_DIR"/build.prop" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/encryptionkey.img" $SYSIMG_DIR"/encryptionkey.img" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/userdata.img" $SYSIMG_DIR"/userdata.img" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/vendor-qemu.img" $SYSIMG_DIR"/vendor.img" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/data" $SYSIMG_DIR || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/product-qemu.img" $SYSIMG_DIR"/product.img" || exit 1
+rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/system_ext-qemu.img" $SYSIMG_DIR"/system_ext.img" || exit 1
