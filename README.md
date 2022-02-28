@@ -18,5 +18,14 @@ Install the Android SDK with Android Studio and set ```$ANDROID_HOME```
 
 Execute the Emulator: ```$ANDROID_HOME/emulator/emulator -avd catfish -show-kernel```
 
+\* Catfish currently only runs on Emulators for ARM-based hosts (e.g. MacBook Pro 2021)
 
-\* Currently only runs on Emulator for ARM-based hosts (e.g. MacBook Pro 2021)
+## Clear the Emulator
+
+```bash bin/clean_avd.sh```
+
+## Sync built files from build-server to localhost
+
+Create ```.env``` file in ```bin``` and adopt variables listed in ```bin/synch_target.sh```
+
+```bash bin/synch_target.sh catfish```
