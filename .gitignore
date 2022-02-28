@@ -1,0 +1,7 @@
+.env
+
+avd/*
+!avd/catfish.ini
+!avd/catfish.avd
+avd/catfish.avd/*
+!avd/catfish.avd/config.ini
