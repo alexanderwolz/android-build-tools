@@ -4,7 +4,9 @@ See also https://github.com/alexanderwolz/android_device_catfish
 
 ## AVD
 
-Copy or SymLink the avds to ```$HOME/.android/avd```
+Customize the absolute path (line 2) in ```avd/catfish.ini```
+
+Copy or SymLink the avd to ```$HOME/.android/avd```
 
 ```mkdir -p $HOME/.android/avd```
 
@@ -14,7 +16,9 @@ Copy or SymLink the avds to ```$HOME/.android/avd```
 
 ## Run the Emulator*
 
-Install the Android SDK with Android Studio and set ```$ANDROID_HOME```
+Install the Android SDK and set ```$ANDROID_HOME```
+
+Install the Android Emulator with version 32.1.5.0 or higher
 
 Execute the Emulator: ```$ANDROID_HOME/emulator/emulator -avd catfish -show-kernel```
 
@@ -28,4 +32,4 @@ Execute the Emulator: ```$ANDROID_HOME/emulator/emulator -avd catfish -show-kern
 
 Create ```.env``` file in ```bin``` and adopt variables listed in ```bin/synch_target.sh```
 
-```bash bin/synch_target.sh catfish```
+Execute script via ```bash bin/synch_target.sh catfish```
