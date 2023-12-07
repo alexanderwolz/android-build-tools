@@ -42,7 +42,7 @@ fi
 echo "Syncing target: '$DEVICE' from $SSH_HOST"
 
 TARGET="$SSH_AOSP_HOME/out/target/product/$DEVICE"
-SYSIMG_DIR="$ANDROID_HOME/system-images/android-33/$DEVICE/arm64-v8a"
+SYSIMG_DIR="$ANDROID_HOME/system-images/android-34/$DEVICE/arm64-v8a"
 mkdir -p $SYSIMG_DIR
 
 #source props missing
