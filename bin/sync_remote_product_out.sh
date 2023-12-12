@@ -10,32 +10,18 @@ echo "---------------------------------------------------------------"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$SCRIPT_DIR/common.sh" || exit 1
 
+echo "Reading device list from $SSH_HOST .."
+DEVICE_NAMES=($($SSH_OPTS $SSH_USER@$SSH_HOST ls $REMOTE_PRODUCT_PARENT_FOLDER))
+if [ ${#DEVICE_NAMES[@]} == 0 ]; then
+	echo "There are no devices available at $REMOTE_PRODUCT_PARENT_FOLDER"
+	echo ""
+	exit 1
+fi
+
 if [ ! -z $1 ]; then
     DEVICE_NAME=$1
 else
-    echo "Reading device list from $SSH_HOST .."
-    DEVICE_NAMES=($($SSH_OPTS $SSH_USER@$SSH_HOST ls $REMOTE_PRODUCT_PARENT_FOLDER))
-    if [ ${#DEVICE_NAMES[@]} == 0 ]; then
-        echo "There are no devices available at $REMOTE_PRODUCT_PARENT_FOLDER"
-        echo ""
-        exit 1
-    fi
-
-    if [ ${#DEVICE_NAMES[@]} == 1 ]; then
-        DEVICE_NAME="${DEVICE_NAMES[0]}"
-        echo "There is only one device availabe, using '$DEVICE_NAME'"
-    else
-        echo ""
-        echo "There are several devices, please choose one:"
-        for NAME in "${DEVICE_NAMES[@]}"
-        do
-            echo " - $NAME"
-        done
-        echo ""
-        echo "please choose a device:"
-        read DEVICE_NAME
-        echo ""
-    fi
+    chooseDevice "${DEVICE_NAMES[@]}" || exit 1
 fi
 
 if [ -z $DEVICE_NAME ]; then
@@ -52,6 +38,16 @@ else
     echo ""
     exit 1
 fi
+
+echo ""
+while true; do
+    read -p "Do you wish to synch '$DEVICE_NAME'? [y/n] " selection
+    case $selection in
+    [y]*) break ;;
+    [n]*) exit ;;
+    *) echo "Please answer y or n." ;;
+    esac
+done
 
 REMOTE_PRODUCT_FOLDER="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE_NAME"
 

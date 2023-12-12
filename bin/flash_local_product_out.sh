@@ -94,18 +94,22 @@ if [[ ${#CONNECTED_DEVICES[@]} -gt 1 ]]; then
     exit 1
 fi
 
-echo "---------------------------------------------------------------"
-echo "using device: $DEVICE_ID"
-echo "---------------------------------------------------------------"
-
 $(fastboot devices | grep $DEVICE_ID > /dev/null)
 IS_NOT_FASTBOOT=$?
+
+DEVICE_NAMES=($(ls $LOCAL_AOSP_SYNCH))
+if [ ${#DEVICE_NAMES[@]} == 0 ]; then
+	echo "There are no devices available at $LOCAL_AOSP_SYNCH"
+	echo ""
+	exit 1
+fi
 
 if [ ! -z $1 ]; then
     DEVICE_NAME=$1
 else
-    echo "Reading device list .."
-    chooseDevice $(ls $LOCAL_AOSP_SYNCH) || exit 1
+    echo "---------------------------------------------------------------"
+    echo "Reading product device list .."
+    chooseDevice "${DEVICE_NAMES[@]}" || exit 1
 fi
 
 if [ -z $DEVICE_NAME ]; then
@@ -113,6 +117,14 @@ if [ -z $DEVICE_NAME ]; then
     echo ""
     exit 1
 fi
+
+ANDROID_PRODUCT_OUT="$LOCAL_AOSP_SYNCH/$DEVICE_NAME"
+export ANDROID_PRODUCT_OUT
+
+echo "---------------------------------------------------------------"
+echo "Using product: $DEVICE_NAME"
+echo "Using device: $DEVICE_ID"
+echo "---------------------------------------------------------------"
 
 echo ""
 while true; do
@@ -123,9 +135,6 @@ while true; do
     *) echo "Please answer y or n." ;;
     esac
 done
-
-ANDROID_PRODUCT_OUT="$LOCAL_AOSP_SYNCH/$DEVICE_NAME"
-export ANDROID_PRODUCT_OUT
 
 if [[ "$FLASH_BOOTLOADER" -eq 1 ||  "$FLASH_IMAGES" -eq 1 ]]; then
     if [ "$IS_NOT_FASTBOOT" -eq 1 ]; then

@@ -62,26 +62,41 @@ SSH_CMD="ssh $SSH_OPTS"
 SSH_OPTS="ssh$SSH_OPTS"
 
 function chooseDevice() {
-    local DEVICE_NAMES=$1
+    local DEVICE_NAMES=("$@")
     if [ ${#DEVICE_NAMES[@]} == 0 ]; then
         echo "There are no devices available at $REMOTE_PRODUCT_PARENT_FOLDER"
         echo ""
         exit 1
     fi
-
     if [ ${#DEVICE_NAMES[@]} == 1 ]; then
         DEVICE_NAME="${DEVICE_NAMES[0]}"
         echo "There is only one device availabe, using '$DEVICE_NAME'"
     else
         echo ""
         echo "There are several devices, please choose one:"
-        for NAME in "${DEVICE_NAMES[@]}"
-        do
-            echo " - $NAME"
+        for INDEX in "${!DEVICE_NAMES[@]}"; do 
+            let DEVICE_INDEX=${INDEX}+1
+            echo "$DEVICE_INDEX. ${DEVICE_NAMES[$INDEX]}"
         done
         echo ""
         echo "please choose a device:"
-        read DEVICE_NAME
+        read INPUT
+        if [[ $INPUT ]] && [ $INPUT -eq $INPUT 2>/dev/null ]; then
+            if [ "$INPUT" -lt "1" ]; then
+                echo "You can't choose zero, except you are Chuck Norris :)"
+                echo ""
+                exit 1
+            fi
+            if [ "$INPUT" -gt "${#DEVICE_NAMES[@]}" ]; then
+                echo "There are only ${#DEVICE_NAMES[@]} devices to choose from."
+                echo ""
+                exit 1
+            fi
+            local INDEX="$((INPUT-1))" #its a valid number, so use the index
+            DEVICE_NAME="${DEVICE_NAMES[$INDEX]}"
+        else
+            DEVICE_NAME=$INPUT
+        fi
         echo ""
     fi
 }

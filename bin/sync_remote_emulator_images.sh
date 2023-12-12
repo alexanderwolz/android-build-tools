@@ -23,28 +23,40 @@ if [ ${#DEVICE_NAMES[@]} == 0 ]; then
 	exit 1
 fi
 
-DEVICE=$1
-if [ -z $DEVICE ]; then
-	DEVICE="emulator64_arm64"
+DEVICE_NAME=$1
+if [ -z $DEVICE_NAME ]; then
+	DEVICE_NAME="emulator64_arm64"
+	echo "No device parameter given, using default device: $DEVICE_NAME"
 fi
 
-if [[ ${DEVICE_NAMES[@]} =~ $DEVICE ]]; then
-  echo "Syncing target: '$DEVICE' from $SSH_HOST"
+echo "---------------------------------------------------------------"
+if [[ ${DEVICE_NAMES[@]} =~ $DEVICE_NAME ]]; then
+  echo "Syncing target: '$DEVICE_NAME' from $SSH_HOST"
 else
-  echo "Device $DEVICE does not exist"
+  echo "Device $DEVICE_NAME does not exist"
   echo ""
   exit 1
 fi
 
-TARGET="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE"
+TARGET="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE_NAME"
 
 BUILD_PROPERTIES=$($SSH_CMD $REMOTE cat $TARGET/system/build.prop)
 
-API_LEVEL=$(echo "$BUILD_PROPERTIES" | grep ro.build.version.sdk= | cut -d'=' -f2)
-ARCH=$(echo "$BUILD_PROPERTIES" | grep ro.product.cpu.abi= | cut -d'=' -f2)
+API_LEVEL=$(echo "$BUILD_PROPERTIES" | grep ro.build.version.sdk= | cut -d'=' -f2) || exit 1
+ARCH=$(echo "$BUILD_PROPERTIES" | grep ro.product.cpu.abi= | cut -d'=' -f2) || exit 1
 # TODO: switch to ro.system.product.cpu.abilist ??
 
 echo "Target has API level $API_LEVEL for arch $ARCH"
+
+echo ""
+while true; do
+    read -p "Do you wish to synch '$DEVICE_NAME'? [y/n] " selection
+    case $selection in
+    [y]*) break ;;
+    [n]*) exit ;;
+    *) echo "Please answer y or n." ;;
+    esac
+done
 
 SYSIMG_DIR="$ANDROID_HOME/system-images/android-$API_LEVEL/whaleshark/$ARCH"
 mkdir -p $SYSIMG_DIR
