@@ -52,7 +52,8 @@ done
 REMOTE_PRODUCT_FOLDER="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE_NAME"
 
 BEGIN=$(date -u +%s)
-rsync -aP -e "$SSH_OPTS" "$SSH_USER@$SSH_HOST":$REMOTE_PRODUCT_FOLDER $LOCAL_AOSP_SYNCH
+#copy everything from $ANDROID_PRODUCT_OUT except symbols folder
+rsync -aP -e "$SSH_OPTS" --exclude symbols "$SSH_USER@$SSH_HOST":$REMOTE_PRODUCT_FOLDER $LOCAL_AOSP_SYNCH
 DURATION=$(($(date -u +%s)-$BEGIN))
 echo "---------------------------------------------------------------"
 echo "AOSP product can be found at $LOCAL_AOSP_SYNCH/$DEVICE_NAME"

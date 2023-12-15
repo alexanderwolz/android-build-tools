@@ -1,10 +1,9 @@
-# Tool Collection for Whale Shark AAOS devices
+# Tool Collection for AOSP and AAOS builds
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/alexanderwolz/android_device_whaleshark_tools)
-![GitHub](https://img.shields.io/badge/aosp-14-orange)
-![GitHub](https://img.shields.io/github/license/alexanderwolz/android_device_whaleshark_tools)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/alexanderwolz/android_device_whaleshark_tools)
-![GitHub all releases](https://img.shields.io/github/downloads/alexanderwolz/android_device_whaleshark_tools/total?color=informational)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/alexanderwolz/android-build-tools)
+![GitHub](https://img.shields.io/github/license/alexanderwolz/android-build-tools)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/alexanderwolz/android-build-tools)
+![GitHub all releases](https://img.shields.io/github/downloads/alexanderwolz/android-build-tools/total?color=informational)
 
 
 ## 🧑‍💻 About
@@ -34,8 +33,35 @@ You can also add ```SSH_KEY="~/.ssh/id_rsa"``` if your SSH is set up with key-pa
 ## 🛠️ Scripts
 
 
-### **bin/sync_remote_product_out.sh**
+### **bin/create_local_product_package.sh**
 
+This scripts creates a zip package that can be flashed to Android devices. Use the script like this:
+
+```
+    bash bin/create_local_product_package.sh
+    bash bin/create_local_product_package.sh $DEVICE_NAME
+```
+
+### **bin/flash_local_product_out.sh**
+
+This scripts flashes all existing images from ```ANDROID_PRODUCT_OUT``` to a connected Android device.
+
+```
+    bash bin/flash_local_product_out.sh
+    bash bin/flash_local_product_out.sh $DEVICE_NAME
+```
+
+
+### **bin/flash_product_zip.sh**
+
+This scripts flashes a given product zip to a connected Android device.
+
+```
+    bash bin/flash_product_zip.sh $ZIP_FILE
+```
+
+
+### **bin/sync_remote_product_out.sh**
 
 This script synchronizes the product files of a given target in ```$ANDROID_PRODUCT_OUT``` on a remote server to ```localhost```. *SSH* and *rsync* must be setup on both ends.
 
@@ -46,8 +72,8 @@ Use the script like this:
     bash bin/sync_remote_product_out.sh $DEVICE_NAME
 ```
 
-### **bin/flash_local_product_out.sh**
 
+### **bin/flash_local_product_out.sh**
 
 Use the script like this:
 
@@ -61,7 +87,6 @@ This script has been tested with images built for Google Pixel Tablet (tangorpro
 
 ### **bin/sync_remote_emulator_images.sh**
 
-
 This script synchronizes emulator image files of a given target in ```$ANDROID_PRODUCT_OUT``` on a remote server to ```localhost``` according to the ```ANDROID_SDK```-location. *SSH* and *rsync* must be setup on both ends.
 
 Use the script like this:
@@ -70,30 +95,3 @@ Use the script like this:
     bash bin/sync_remote_emulator_images.sh
     bash bin/sync_remote_emulator_images.sh $DEVICE_NAME
 ```
-
-
-## ⚙️ Android Virtual Device (AVD) configuration
-
-### Setup
-
-Copy the appropriate avd folder to ```$HOME/.android/avd```
-
-```mkdir -p $HOME/.android/avd```
-
-```cp -r avd/API34/whaleshark.avd $HOME/.android/avd/whaleshark.avd```
-
-```cp avd/API34/whaleshark.ini $HOME/.android/avd/whaleshark.ini```
-
-
-### Run the Emulator
-
-Install the Android SDK and set ```$ANDROID_SDK_HOME```
-
-Install the Android Emulator with version 33.1.23.0 or higher
-
-Execute the Emulator: ```$ANDROID_SDK_HOME/emulator/emulator -avd whaleshark -show-kernel```
-
-
-### Clear the Emulator
-
-```bash bin/avd_wipe.sh```

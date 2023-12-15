@@ -31,7 +31,7 @@ fi
 
 echo "---------------------------------------------------------------"
 if [[ ${DEVICE_NAMES[@]} =~ $DEVICE_NAME ]]; then
-  echo "Syncing target: '$DEVICE_NAME' from $SSH_HOST"
+  echo "Syncing target device '$DEVICE_NAME' from $SSH_HOST"
 else
   echo "Device $DEVICE_NAME does not exist"
   echo ""
@@ -43,14 +43,16 @@ TARGET="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE_NAME"
 BUILD_PROPERTIES=$($SSH_CMD $REMOTE cat $TARGET/system/build.prop)
 
 API_LEVEL=$(echo "$BUILD_PROPERTIES" | grep ro.build.version.sdk= | cut -d'=' -f2) || exit 1
-ARCH=$(echo "$BUILD_PROPERTIES" | grep ro.product.cpu.abi= | cut -d'=' -f2) || exit 1
 # TODO: switch to ro.system.product.cpu.abilist ??
+ARCH=$(echo "$BUILD_PROPERTIES" | grep ro.product.cpu.abi= | cut -d'=' -f2) || exit 1
+BUILD_FLAVOR=$(echo "$BUILD_PROPERTIES" | grep ro.build.flavor= | cut -d'=' -f2) || exit 1
+TARGET_NAME=$(echo "$BUILD_FLAVOR" | cut -d'_' -f1)|| exit 1
 
-echo "Target has API level $API_LEVEL for arch $ARCH"
+echo "Product '$TARGET_NAME' has API level $API_LEVEL for arch $ARCH"
 
 echo ""
 while true; do
-    read -p "Do you wish to synch '$DEVICE_NAME'? [y/n] " selection
+    read -p "Do you wish to synch '$TARGET_NAME' ($DEVICE_NAME)? [y/n] " selection
     case $selection in
     [y]*) break ;;
     [n]*) exit ;;
@@ -58,7 +60,7 @@ while true; do
     esac
 done
 
-SYSIMG_DIR="$ANDROID_HOME/system-images/android-$API_LEVEL/whaleshark/$ARCH"
+SYSIMG_DIR="$ANDROID_HOME/system-images/android-$API_LEVEL/$TARGET_NAME/$ARCH"
 mkdir -p $SYSIMG_DIR
 
 BEGIN=$(date -u +%s)

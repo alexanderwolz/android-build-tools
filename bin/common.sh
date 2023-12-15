@@ -70,7 +70,7 @@ function chooseDevice() {
     fi
     if [ ${#DEVICE_NAMES[@]} == 1 ]; then
         DEVICE_NAME="${DEVICE_NAMES[0]}"
-        echo "There is only one device availabe, using '$DEVICE_NAME'"
+        echo "There is only one device available, using '$DEVICE_NAME'"
     else
         echo ""
         echo "There are several devices, please choose one:"
