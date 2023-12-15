@@ -119,8 +119,6 @@ function setRemoteProductParent() {
         LOCAL_AOSP_HOME=$LOCAL_AOSP_ROOT/$(basename $REMOTE_AOSP_HOME)
     fi
     REMOTE_PRODUCT_PARENT_FOLDER="$REMOTE_AOSP_HOME/out/target/product"
-    echo $REMOTE_PRODUCT_PARENT_FOLDER
-    echo $LOCAL_AOSP_HOME
 }
 
 function chooseRemoteAOSPHome() {
