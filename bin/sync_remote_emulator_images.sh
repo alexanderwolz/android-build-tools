@@ -15,6 +15,8 @@ if [ ! $ANDROID_HOME ]; then
 	exit 1
 fi
 
+setRemoteProductParent
+
 echo "Reading device list from $SSH_HOST .."
 DEVICE_NAMES=($($SSH_OPTS $SSH_USER@$SSH_HOST ls $REMOTE_PRODUCT_PARENT_FOLDER))
 if [ ${#DEVICE_NAMES[@]} == 0 ]; then
@@ -31,7 +33,7 @@ fi
 
 echo "---------------------------------------------------------------"
 if [[ ${DEVICE_NAMES[@]} =~ $DEVICE_NAME ]]; then
-  echo "Syncing target device '$DEVICE_NAME' from $SSH_HOST"
+  echo "Syncing target device '$DEVICE_NAME' in $REMOTE_AOSP_HOME from $SSH_HOST"
 else
   echo "Device $DEVICE_NAME does not exist"
   echo ""
@@ -40,7 +42,7 @@ fi
 
 TARGET="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE_NAME"
 
-BUILD_PROPERTIES=$($SSH_CMD $REMOTE cat $TARGET/system/build.prop)
+BUILD_PROPERTIES=$($SSH_CMD cat $TARGET/system/build.prop)
 
 API_LEVEL=$(echo "$BUILD_PROPERTIES" | grep ro.build.version.sdk= | cut -d'=' -f2) || exit 1
 # TODO: switch to ro.system.product.cpu.abilist ??

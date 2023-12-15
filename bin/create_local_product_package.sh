@@ -23,9 +23,11 @@ echo "---------------------------------------------------------------"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$SCRIPT_DIR/common.sh" || exit 1
 
-DEVICE_NAMES=($(ls $LOCAL_AOSP_SYNCH))
+setLocalAOSPHome
+
+DEVICE_NAMES=($(ls $LOCAL_AOSP_HOME))
 if [ ${#DEVICE_NAMES[@]} == 0 ]; then
-	echo "There are no devices available at $LOCAL_AOSP_SYNCH"
+	echo "There are no devices available at $LOCAL_AOSP_HOME"
 	echo ""
 	exit 1
 fi
@@ -38,13 +40,7 @@ else
     chooseDevice "${DEVICE_NAMES[@]}" || exit 1
 fi
 
-if [ -z $DEVICE_NAME ]; then
-    echo "Something's wrong, try again"
-    echo ""
-    exit 1
-fi
-
-ANDROID_PRODUCT_OUT="$LOCAL_AOSP_SYNCH/$DEVICE_NAME"
+ANDROID_PRODUCT_OUT="$LOCAL_AOSP_HOME/$DEVICE_NAME"
 export ANDROID_PRODUCT_OUT
 
 echo "---------------------------------------------------------------"
@@ -140,7 +136,7 @@ rm -rf $PACKAGE_DIR
 
 DURATION=$(($(date -u +%s)-$BEGIN))
 echo "---------------------------------------------------------------"
-echo "Package can be found at $PACKAGE_DIR_ZIP"
+echo "Package can be found at ../packages/$(basename $PACKAGE_DIR_ZIP)"
 echo "---------------------------------------------------------------"
 echo "Finished - took $(($DURATION / 60)) minutes and $(($DURATION % 60)) seconds"
 echo "---------------------------------------------------------------"

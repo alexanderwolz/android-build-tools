@@ -1,5 +1,7 @@
 .env
 
+packages
+
 avd/*
 !avd/whaleshark.ini
 !avd/whaleshark.avd

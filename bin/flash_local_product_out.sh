@@ -8,7 +8,7 @@ function printHelpMenu(){
     echo "----------------------------"
     echo "  -b flash bootloader"
     echo "  -f flash images"
-    echo "  -v synch vendor partition"
+    echo "  -v sync vendor partition"
     echo "----------------------------"
     echo "  -h print this menu"
     echo ""
@@ -94,12 +94,14 @@ if [[ ${#CONNECTED_DEVICES[@]} -gt 1 ]]; then
     exit 1
 fi
 
+setLocalAOSPHome
+
 $(fastboot devices | grep $DEVICE_ID > /dev/null)
 IS_NOT_FASTBOOT=$?
 
-DEVICE_NAMES=($(ls $LOCAL_AOSP_SYNCH))
+DEVICE_NAMES=($(ls $LOCAL_AOSP_HOME))
 if [ ${#DEVICE_NAMES[@]} == 0 ]; then
-	echo "There are no devices available at $LOCAL_AOSP_SYNCH"
+	echo "There are no devices available at $LOCAL_AOSP_HOME"
 	echo ""
 	exit 1
 fi
@@ -108,17 +110,11 @@ if [ ! -z $1 ]; then
     DEVICE_NAME=$1
 else
     echo "---------------------------------------------------------------"
-    echo "Reading product device list .."
+    echo "Reading product device list from $LOCAL_AOSP_HOME .."
     chooseDevice "${DEVICE_NAMES[@]}" || exit 1
 fi
 
-if [ -z $DEVICE_NAME ]; then
-    echo "Something's wrong, try again"
-    echo ""
-    exit 1
-fi
-
-ANDROID_PRODUCT_OUT="$LOCAL_AOSP_SYNCH/$DEVICE_NAME"
+ANDROID_PRODUCT_OUT="$LOCAL_AOSP_HOME/$DEVICE_NAME"
 export ANDROID_PRODUCT_OUT
 
 echo "---------------------------------------------------------------"

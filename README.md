@@ -23,8 +23,8 @@ A ```.env```-file must be place in the root folder of this repository containing
 SSH_HOST="server.de"
 SSH_USER="root"
 SSH_PORT="22"
-REMOTE_AOSP_HOME="/home/$USER/aosp"
-LOCAL_AOSP_SYNCH="/home/$USER/aosp"
+REMOTE_AOSP_ROOT="/home/$USER/aosp"
+LOCAL_AOSP_ROOT="/home/$USER/aosp"
 ```
 
 References to folders should be absolute.
