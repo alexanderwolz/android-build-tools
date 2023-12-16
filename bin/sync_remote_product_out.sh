@@ -24,6 +24,8 @@ if [ ! -z $1 ]; then
     DEVICE_NAME=$1
 else
     chooseDevice "${DEVICE_NAMES[@]}" || exit 1
+    echo ""
+    echo "---------------------------------------------------------------"
 fi
 
 if [[ ${DEVICE_NAMES[@]} =~ $DEVICE_NAME ]]; then

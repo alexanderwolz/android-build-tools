@@ -31,6 +31,7 @@ if [ -z $DEVICE_NAME ]; then
 	echo "No device parameter given, using default device: $DEVICE_NAME"
 fi
 
+echo ""
 echo "---------------------------------------------------------------"
 if [[ ${DEVICE_NAMES[@]} =~ $DEVICE_NAME ]]; then
   echo "Syncing target device '$DEVICE_NAME' in $REMOTE_AOSP_HOME from $SSH_HOST"
@@ -49,8 +50,10 @@ API_LEVEL=$(echo "$BUILD_PROPERTIES" | grep ro.build.version.sdk= | cut -d'=' -f
 ARCH=$(echo "$BUILD_PROPERTIES" | grep ro.product.cpu.abi= | cut -d'=' -f2) || exit 1
 BUILD_FLAVOR=$(echo "$BUILD_PROPERTIES" | grep ro.build.flavor= | cut -d'=' -f2) || exit 1
 TARGET_NAME=$(echo "$BUILD_FLAVOR" | cut -d'_' -f1)|| exit 1
+SYSIMG_DIR="$ANDROID_HOME/system-images/android-$API_LEVEL/$TARGET_NAME/$ARCH"
 
 echo "Product '$TARGET_NAME' has API level $API_LEVEL for arch $ARCH"
+echo "Using system folder $SYSIMG_DIR"
 
 echo ""
 while true; do
@@ -62,10 +65,10 @@ while true; do
     esac
 done
 
-SYSIMG_DIR="$ANDROID_HOME/system-images/android-$API_LEVEL/$TARGET_NAME/$ARCH"
+BEGIN=$(date -u +%s)
+
 mkdir -p $SYSIMG_DIR
 
-BEGIN=$(date -u +%s)
 #source props missing
 rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/kernel-ranchu" $SYSIMG_DIR"/kernel-ranchu-64" || exit 1
 rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/ramdisk-qemu.img" $SYSIMG_DIR"/ramdisk.img" || exit 1
@@ -79,7 +82,9 @@ rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/vendor-qemu.img" $SYSIMG_DIR"/vendor.
 rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/data" $SYSIMG_DIR || exit 1
 rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/product-qemu.img" $SYSIMG_DIR"/product.img" || exit 1
 rsync -avP -e "$SSH_OPTS" $REMOTE:$TARGET"/system_ext-qemu.img" $SYSIMG_DIR"/system_ext.img" || exit 1
+
 DURATION=$(($(date -u +%s)-$BEGIN))
+
 echo ""
 echo "---------------------------------------------------------------"
 echo "Images can be found at $SYSIMG_DIR"
