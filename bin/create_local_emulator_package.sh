@@ -127,7 +127,7 @@ else
     echo ""
     echo "There are several architectures, please choose one:"
     for INDEX in "${!ARCHS[@]}"; do 
-        let ARCH_INDEX=${ARCHS}+1
+        let ARCH_INDEX=${INDEX}+1
         echo "$ARCH_INDEX. ${ARCHS[$INDEX]}"
     done
     echo ""

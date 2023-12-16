@@ -25,20 +25,20 @@ if [ ${#DEVICE_NAMES[@]} == 0 ]; then
 	exit 1
 fi
 
-DEVICE_NAME=$1
-if [ -z $DEVICE_NAME ]; then
-	DEVICE_NAME="emulator64_arm64"
-	echo "No device parameter given, using default device: $DEVICE_NAME"
+if [ ! -z $1 ]; then
+    DEVICE_NAME=$1
+else
+    chooseDevice "${DEVICE_NAMES[@]}" || exit 1
+    echo "---------------------------------------------------------------"
 fi
 
-echo ""
-echo "---------------------------------------------------------------"
 if [[ ${DEVICE_NAMES[@]} =~ $DEVICE_NAME ]]; then
-  echo "Syncing target device '$DEVICE_NAME' in $REMOTE_AOSP_HOME from $SSH_HOST"
+    echo "Synching AOSP device '$DEVICE_NAME' in $REMOTE_AOSP_HOME from $SSH_HOST .."
+    echo "---------------------------------------------------------------"
 else
-  echo "Device $DEVICE_NAME does not exist"
-  echo ""
-  exit 1
+    echo "Device $DEVICE does not exist"
+    echo ""
+    exit 1
 fi
 
 TARGET="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE_NAME"
