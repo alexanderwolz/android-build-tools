@@ -211,8 +211,8 @@ pushd $PACKAGE_DIR > /dev/null
 zip -r $PACKAGE_DIR_ZIP . || exit 1
 popd > /dev/null
 
-echo "Cleaning up .."
-rm -rf $PACKAGE_DIR
+# echo "Cleaning up .."
+# rm -rf $PACKAGE_DIR
 
 
 DURATION=$(($(date -u +%s)-$BEGIN))

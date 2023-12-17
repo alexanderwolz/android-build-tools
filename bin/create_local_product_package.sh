@@ -130,8 +130,8 @@ rm -rf $PACKAGE_IMAGE_DIR || exit 1
 echo "Zipping all content .."
 zip -j $PACKAGE_DIR_ZIP $PACKAGE_DIR/* || exit 1
 
-echo "Cleaning up .."
-rm -rf $PACKAGE_DIR
+#echo "Cleaning up .."
+#rm -rf $PACKAGE_DIR
 
 
 DURATION=$(($(date -u +%s)-$BEGIN))

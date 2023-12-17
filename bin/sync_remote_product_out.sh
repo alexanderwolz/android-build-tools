@@ -1,6 +1,16 @@
 #!/bin/bash
 # Copyright (C) 2023 Alexander Wolz <mail@alexanderwolz.de>
 
+function printHelpMenu(){
+    echo ""
+    echo "usage: [options] [device-name]"
+    echo "----------------------------"
+    echo "  -a sync everything"
+    echo "----------------------------"
+    echo "  -h print this menu"
+    echo ""
+}
+
 
 echo ""
 echo "---------------------------------------------------------------"
@@ -9,6 +19,23 @@ echo "---------------------------------------------------------------"
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$SCRIPT_DIR/common.sh" || exit 1
+
+while getopts a?h opt; do
+    case $opt in
+    a)
+        SYNC_ALL=1
+        echo "!! Syncing everything !!"
+        echo "---------------------------------------------------------------"
+        ;;
+    h)
+        printHelpMenu
+        exit 0
+        ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+[ "${1:-}" = "--" ] && shift
 
 setRemoteProductParent
 
@@ -51,8 +78,16 @@ done
 REMOTE_PRODUCT_FOLDER="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE_NAME"
 
 BEGIN=$(date -u +%s)
-#copy everything from $ANDROID_PRODUCT_OUT except symbols folder
-rsync -avh -e "$SSH_OPTS" --delete --exclude symbols "$SSH_USER@$SSH_HOST":$REMOTE_PRODUCT_FOLDER $LOCAL_AOSP_HOME
+
+if [ ! -z $SYNC_ALL ]; then
+    #copy everything from $ANDROID_PRODUCT_OUT
+    rsync -avh -e "$SSH_OPTS" --delete "$SSH_USER@$SSH_HOST":$REMOTE_PRODUCT_FOLDER $LOCAL_AOSP_HOME
+else
+    #copy everything from $ANDROID_PRODUCT_OUT except exclude folders
+    rsync -avh -e "$SSH_OPTS" --delete --exclude apex --exclude symbols --exclude obj --exclude obj_arm --exclude obj_x86 \
+    "$SSH_USER@$SSH_HOST":$REMOTE_PRODUCT_FOLDER $LOCAL_AOSP_HOME
+fi
+
 DURATION=$(($(date -u +%s)-$BEGIN))
 echo "---------------------------------------------------------------"
 echo "AOSP product can be found at $LOCAL_AOSP_HOME/$DEVICE_NAME"
