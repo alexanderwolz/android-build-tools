@@ -79,6 +79,8 @@ REMOTE_PRODUCT_FOLDER="$REMOTE_PRODUCT_PARENT_FOLDER/$DEVICE_NAME"
 
 BEGIN=$(date -u +%s)
 
+mkdir -p $LOCAL_AOSP_HOME
+
 if [ ! -z $SYNC_ALL ]; then
     #copy everything from $ANDROID_PRODUCT_OUT
     rsync -avh -e "$SSH_OPTS" --delete "$SSH_USER@$SSH_HOST":$REMOTE_PRODUCT_FOLDER $LOCAL_AOSP_HOME
