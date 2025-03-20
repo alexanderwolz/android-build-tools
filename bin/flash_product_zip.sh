@@ -51,7 +51,7 @@ echo "setting adb root .."
 adb root
 
 VERITY_MODE=$(adb shell getprop ro.boot.veritymode)
-if [ "$VERITY_MODE" == "enabled" ]; then
+if [ "$VERITY_MODE" == "enabled" ]  || [ "$VERITY_MODE" = "enforcing" ]; then
     echo "disabling verity .."
     adb disable-verity
     sleep 3
