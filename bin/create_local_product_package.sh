@@ -99,10 +99,18 @@ if [ -f $BOOTLOADER ]; then
 fi
 
 add system/build.prop build.prop
+#add abl.img
 add android-info.txt
+#add bl1.img
+#add bl2.img
+#add bl31.img
 add boot.img
 add dtbo.img
+add fastboot-info.txt
+#add gsa.img
 add init_boot.img
+#add ldfw.img
+#add pbl.img
 add product.img
 add pvmfw.img
 add super_empty.img
@@ -110,6 +118,7 @@ add system_dlkm.img
 add system_ext.img
 add system_other.img
 add system.img
+#add tzsw.img
 add vbmeta_system.img
 add vbmeta_vendor.img
 add vbmeta.img
