@@ -73,6 +73,9 @@ fastboot flash vendor_dlkm_$SLOT $AOSP_OUT/vendor_dlkm.img || exit 1
 echo "-------------------------------------------------------------"
 deleteAndCreatePartition system_dlkm || exit 1
 fastboot flash system_dlkm_$SLOT $AOSP_OUT/system_dlkm.img || exit 1
+echo "-------------------------------------------------------------"
+deleteAndCreatePartition vendor || exit 1
+fastboot flash vendor_$SLOT $AOSP_OUT/vendor.img || exit 1
 
 
 # Kernel and boot
